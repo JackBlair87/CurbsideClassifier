@@ -21,7 +21,7 @@
      // Use this for initialization
      ArrayList scenes;
      void Start () {
-        string path = Application.dataPath + "/TrainingImages/positions.txt";
+        string path = Application.dataPath + "/TrainingImages/image_dictionary.json";
 
         Dictionary<int, float> verticalPositions = new Dictionary<int, float>();
         verticalPositions[0] = 0f;
@@ -131,7 +131,7 @@
                 }
                 big_string += final;
             }
-            massive_string += "\"" + x + ".png" + "\":{" + big_string + "}";
+            massive_string += "\"" + x + ".jpg" + "\":{" + big_string + "}";
             if(x != NUM_SAMPLES-1){
                     massive_string += ",\n";
                 }
