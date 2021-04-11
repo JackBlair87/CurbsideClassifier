@@ -58,7 +58,6 @@
      <Compile Include="Assets\Scripts\SR_RenderCamera.cs" />
      <None Include="Assets\3D Assets\Nicrom\PolyPacks\Wind\Documentation\LPW_Log.txt" />
      <None Include="Assets\3D Assets\Nicrom\PolyPacks\Wind\Assets\Shaders\ASE\LPW_Vegetation.shader" />
-     <None Include="Assets\TrainingImages\positions.txt" />
  <Reference Include="Unity.TextMeshPro.Editor">
  <HintPath>/Users/jackblair/CurbsideClassifier/3DEnviornment/HackTJ8.0/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
  </Reference>

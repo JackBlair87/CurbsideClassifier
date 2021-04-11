@@ -5,7 +5,7 @@
  using System;
  
  public class CarSpawner : MonoBehaviour {
-     int NUM_SAMPLES = 3000;
+     public int NUM_SAMPLES;
 
      public GameObject van;
      public GameObject truck;
@@ -13,17 +13,15 @@
      public GameObject chevy;
      public GameObject sports;
 
-     string path;
      public int curr = 0;
-     public int NumSpots = 8;
+     public int NumSpots = 8; 
 
      public Dictionary<int, Vector3> dict;
-     System.Random rnd = new System.Random();
      ArrayList currObjects = new ArrayList(); //cars loaded in the scene
      // Use this for initialization
      ArrayList scenes;
      void Start () {
-        path = Application.dataPath + "/TrainingImages/positions.txt";
+        string path = Application.dataPath + "/TrainingImages/positions.txt";
 
         Dictionary<int, float> verticalPositions = new Dictionary<int, float>();
         verticalPositions[0] = 0f;
@@ -34,10 +32,10 @@
 
         dict = new Dictionary<int, Vector3>();
         for(int x = 0; x < 5; x++){
-            dict[x*NumSpots + 0] = new Vector3(-12.0f, verticalPositions[x], -8.5f);
-            dict[x*NumSpots + 1] = new Vector3(-12.0f, verticalPositions[x], -4.3f);
-            dict[x*NumSpots + 2] = new Vector3(-12.0f, verticalPositions[x], -0.1f);
-            dict[x*NumSpots + 3] = new Vector3(-12.0f, verticalPositions[x], 4.1f);
+            dict[x*NumSpots + 0] = new Vector3(-12.5f, verticalPositions[x], -8.5f);
+            dict[x*NumSpots + 1] = new Vector3(-12.5f, verticalPositions[x], -4.3f);
+            dict[x*NumSpots + 2] = new Vector3(-12.5f, verticalPositions[x], -0.1f);
+            dict[x*NumSpots + 3] = new Vector3(-12.5f, verticalPositions[x], 4.1f);
             dict[x*NumSpots + 4] = new Vector3(-1f, verticalPositions[x], -8.5f);
             dict[x*NumSpots + 5] = new Vector3(-1f, verticalPositions[x], -4.3f);
             dict[x*NumSpots + 6] = new Vector3(-1f, verticalPositions[x], -0.1f);

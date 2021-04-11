@@ -21,7 +21,7 @@ public class SR_RenderCamera : MonoBehaviour {
     
     void step()
     {
-        if(FileCounter <= Max && FileCounter != -1){
+        if(FileCounter <= Max && FileCounter > 0){
             Camera Cam = GetComponent<Camera>();
     
             RenderTexture currentRT = RenderTexture.active;
