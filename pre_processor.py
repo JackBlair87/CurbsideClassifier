@@ -63,8 +63,8 @@ def main():
         if not os.path.exists(directory):
             os.makedirs(directory)
         for index, image in enumerate(save_image_list):
-            filename = os.path.join(directory, 'image_' + str(index)+'.png')
-            image.save(filename, 'PNG')
+            filename = os.path.join(directory, 'image_' + str(index)+'.jpg')
+            image.save(filename, 'JPEG')
     print('Done saving images')
 
     print('Preprocessing complete')
@@ -110,5 +110,5 @@ def slice_lot(lot_image):
 
 if __name__ == '__main__':
     main()
-    # im = PIL.Image.open('./raw_training_data/15.png')
+    # im = PIL.Image.open('./raw_training_data/15.jpg')
     # slice_lot(im)
