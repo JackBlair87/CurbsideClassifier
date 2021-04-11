@@ -14,15 +14,12 @@
      public GameObject sports;
 
      string path;
-     string[] jsonString;
-     public int count = 0;
      public int curr = 0;
      public int NumSpots = 8;
 
      public Dictionary<int, Vector3> dict;
      System.Random rnd = new System.Random();
-     public Scene s;
-     ArrayList currObjects = new ArrayList();
+     ArrayList currObjects = new ArrayList(); //cars loaded in the scene
      // Use this for initialization
      ArrayList scenes;
      void Start () {
@@ -54,30 +51,31 @@
         save(path);
      }
 
-     private void LateUpdate()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            incrament();  
-        }
-    }
+    //  private void LateUpdate()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Space))
+    //     {
+    //         incrament();  
+    //     }
+    // }
  
      // Update is called once per frame
-     void incrament () {
+     void Update () {
          if(curr < NUM_SAMPLES){
             clearCars(currObjects);
             for(int x = 0; x < 8; x++){
                 Scene s = (Scene) scenes[curr];
                 if(s.lot[x] != null){
                     Car c = s.lot[x];
-                    print("Placing car " + x);
-                    print(s.lot[x]);
-                    print(c);
                     placeCar(x, c.car);
+                    Debug.Log("Scene Number" + curr);
                 } 
                 
             }
              curr += 1;
+         }
+         else{
+             Application.Quit();
          }
      }
 
@@ -112,7 +110,7 @@
         ArrayList currObjects = new ArrayList();
      }
 
-     public void save(string filename){
+    public void save(string filename){
         //lot
         string massive_string = "";
         for(int x = 0; x < NUM_SAMPLES; x++){
@@ -151,33 +149,22 @@ public class Scene{
     int LOTSIZE = 8;
     float SPAWN_RATE = 0.35f;
 
-    public GameObject van;
-     public GameObject truck;
-     public GameObject mustdang;
-     public GameObject chevy;
-     public GameObject sports;
 
 
     public Dictionary<string, ArrayList> CARS = new Dictionary<string, ArrayList>();
     
     public Dictionary<int, Car> lot = new Dictionary<int, Car>();
+    System.Random rnd = new System.Random();
     public Scene(GameObject v, GameObject t, GameObject m, GameObject c, GameObject s){ 
-        van = v;
-        truck = t;
-        mustdang = m;
-        chevy = c;
-        sports = s;
-
-        CARS["VAN"] = new ArrayList(){"Green", "Van", van};
-        CARS["TRUCK"] = new ArrayList(){"Yellow", "Pick-up Truck", truck};
-        CARS["MUSTANG"] = new ArrayList(){"Blue", "Sports Car", mustdang};
-        CARS["CHEVY"] = new ArrayList(){"Brown", "Sedan", chevy};
-        CARS["SPORTS"] = new ArrayList(){"Purple", "Sports Car", sports};
+        Debug.Log("Creating new scene");
+        CARS["VAN"] = new ArrayList(){"Green", "Van", v};
+        CARS["TRUCK"] = new ArrayList(){"Yellow", "Pick-up Truck", t};
+        CARS["MUSTANG"] = new ArrayList(){"Blue", "Sports Car", m};
+        CARS["CHEVY"] = new ArrayList(){"Brown", "Sedan", c};
+        CARS["SPORTS"] = new ArrayList(){"Purple", "Sports Car", s};
         
         ArrayList sample_pool = new ArrayList(CARS.Keys);
         reshuffle(sample_pool);
-
-        System.Random rnd = new System.Random();
 
         for(int k = 0; k < LOTSIZE; k++){
             if(rnd.NextDouble() < SPAWN_RATE){
