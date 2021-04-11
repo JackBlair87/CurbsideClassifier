@@ -5,7 +5,7 @@
  using System;
  
  public class CarSpawner : MonoBehaviour {
-     int NUM_SAMPLES = 1000;
+     int NUM_SAMPLES = 3000;
 
      public GameObject van;
      public GameObject truck;
@@ -55,7 +55,7 @@
     // {
     //     if (Input.GetKeyDown(KeyCode.Space))
     //     {
-    //         incrament();  
+    //         step();  
     //     }
     // }
  
@@ -164,7 +164,7 @@ public class Scene{
         CARS["SPORTS"] = new ArrayList(){"Purple", "Sports Car", s};
         
         ArrayList sample_pool = new ArrayList(CARS.Keys);
-        reshuffle(sample_pool);
+        shuffle(sample_pool);
 
         for(int k = 0; k < LOTSIZE; k++){
             if(rnd.NextDouble() < SPAWN_RATE){
@@ -180,19 +180,15 @@ public class Scene{
         }
     }
 
-    private void reshuffle(ArrayList texts)
+    private void shuffle(ArrayList texts)
     {
-        // Knuth shuffle algorithm :: courtesy of Wikipedia :slight_smile:
-        for (int t = 0; t < texts.Count; t++ )
-        {
+        for (int t = 0; t < texts.Count; t++ ){
             object tmp = texts[t];
             int r = UnityEngine.Random.Range(t, texts.Count);
             texts[t] = texts[r];
             texts[r] = tmp;
         }
     }
-
-
 }
 
 public class Car{
