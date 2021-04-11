@@ -7,17 +7,21 @@ public class SR_RenderCamera : MonoBehaviour {
 
     public int Max;
 
-    // private void LateUpdate()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.Space))
-    //     {
-    //         step();  
-    //     }
-    // }
-    
-    void Update()
+    private void LateUpdate()
     {
-        if(FileCounter <= Max){
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            step();  
+        }
+    }
+
+    void Update(){
+        step();
+    }
+    
+    void step()
+    {
+        if(FileCounter <= Max && FileCounter > 0){
             Camera Cam = GetComponent<Camera>();
     
             RenderTexture currentRT = RenderTexture.active;
@@ -30,13 +34,12 @@ public class SR_RenderCamera : MonoBehaviour {
             Image.Apply();
             RenderTexture.active = currentRT;
     
-            var Bytes = Image.EncodeToPNG();
+            var Bytes = Image.EncodeToJPG();
             Destroy(Image);
     
-            File.WriteAllBytes(Application.dataPath + "/TrainingImages/" + (FileCounter-1) + ".png", Bytes);
+            File.WriteAllBytes(Application.dataPath + "/TrainingImages/" + (FileCounter-1) + ".jpg", Bytes);
             Debug.Log(FileCounter);
         }
         FileCounter++;
     }
-   
 }
