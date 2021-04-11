@@ -34,49 +34,51 @@
 
         dict = new Dictionary<int, Vector3>();
         for(int x = 0; x < 5; x++){
-            dict[x*NumSpots + 0] = new Vector3(-13f+((float) rnd.NextDouble() * 1.0f) - 0.5f, verticalPositions[x], -8.5f);
-            dict[x*NumSpots + 1] = new Vector3(-13f+((float) rnd.NextDouble() * 1.0f) - 0.5f, verticalPositions[x], -4.3f);
-            dict[x*NumSpots + 2] = new Vector3(-13f+((float) rnd.NextDouble() * 1.0f) - 0.5f, verticalPositions[x], -0.1f);
-            dict[x*NumSpots + 3] = new Vector3(-13f+((float) rnd.NextDouble() * 1.0f) - 0.5f, verticalPositions[x], 4.1f);
-            dict[x*NumSpots + 4] = new Vector3(((float) rnd.NextDouble() * 1.0f) - 0.5f, verticalPositions[x], -8.5f);
-            dict[x*NumSpots + 5] = new Vector3(((float) rnd.NextDouble() * 1.0f) - 0.5f, verticalPositions[x], -4.3f);
-            dict[x*NumSpots + 6] = new Vector3(((float) rnd.NextDouble() * 1.0f) - 0.5f, verticalPositions[x], -0.1f);
-            dict[x*NumSpots + 7] = new Vector3(((float) rnd.NextDouble() * 1.0f) - 0.5f, verticalPositions[x], 4.1f);
+            dict[x*NumSpots + 0] = new Vector3(-12.0f, verticalPositions[x], -8.5f);
+            dict[x*NumSpots + 1] = new Vector3(-12.0f, verticalPositions[x], -4.3f);
+            dict[x*NumSpots + 2] = new Vector3(-12.0f, verticalPositions[x], -0.1f);
+            dict[x*NumSpots + 3] = new Vector3(-12.0f, verticalPositions[x], 4.1f);
+            dict[x*NumSpots + 4] = new Vector3(-1f, verticalPositions[x], -8.5f);
+            dict[x*NumSpots + 5] = new Vector3(-1f, verticalPositions[x], -4.3f);
+            dict[x*NumSpots + 6] = new Vector3(-1f, verticalPositions[x], -0.1f);
+            dict[x*NumSpots + 7] = new Vector3(-1f, verticalPositions[x], 4.1f);
         }
 
         scenes = new ArrayList();
-        for(int x = 0; x < NUM_SAMPLES; x++){
+        for(int x = 0; x < NUM_SAMPLES; x++)
             scenes.Add(new Scene(van, truck, mustdang, chevy, sports));
-        }
         save(path);
      }
 
-    //  private void LateUpdate()
-    // {
-    //     if (Input.GetKeyDown(KeyCode.Space))
-    //     {
-    //         step();  
-    //     }
-    // }
+     private void LateUpdate()
+    {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            step();  
+        }
+    }
+
+    void Update(){
+        step();
+    }
  
      // Update is called once per frame
-     void Update () {
-         if(curr < NUM_SAMPLES){
+    public void step(){
+        if(curr < NUM_SAMPLES){
             clearCars(currObjects);
             for(int x = 0; x < 8; x++){
                 Scene s = (Scene) scenes[curr];
                 if(s.lot[x] != null){
                     Car c = s.lot[x];
                     placeCar(x, c.car);
-                    Debug.Log("Scene Number" + curr);
                 } 
-                
             }
-             curr += 1;
-         }
-         else{
-             Application.Quit();
-         }
+            curr += 1;
+        }
+        else{
+            Application.Quit();
+            Debug.Break();
+        }
      }
 
      void placeCar(int place, GameObject car){
@@ -95,7 +97,8 @@
         else if(car == sports)
              constant = 4;
 
-        GameObject item = Instantiate(car, dict[(constant * NumSpots) + place], Quaternion.identity);
+        Vector3 randomness = new Vector3(UnityEngine.Random.Range(0f, 0.5f)-0.25f, 0f, UnityEngine.Random.Range(0f, 1f)-0.5f);
+        GameObject item = Instantiate(car, dict[(constant * NumSpots) + place] + randomness, Quaternion.identity);
         currObjects.Add(item);
         if(place > 3)
             item.transform.Rotate(0.0f, 270.0f, 0.0f, Space.Self);
@@ -112,7 +115,7 @@
 
     public void save(string filename){
         //lot
-        string massive_string = "";
+        string massive_string = "{\"all_car_models\": [\"Yellow\", \"Green\", \"Brown\", \"Purple\", \"Blue\", \"Empty\"], \"image_filename_labels\": {";
         for(int x = 0; x < NUM_SAMPLES; x++){
             Scene s = (Scene) scenes[x];
             Dictionary<int, string> cars = new Dictionary<int, string>();
@@ -135,80 +138,7 @@
                     massive_string += ",\n";
                 }
                 
-            File.WriteAllText (filename, massive_string);
+            File.WriteAllText (filename, massive_string + "}}");
         }
     }
  } 
- 
- 
-
-public class Scene{
-        
-    int MIN_CARS = 0;
-    int MAX_CARS = 5;
-    int LOTSIZE = 8;
-    float SPAWN_RATE = 0.35f;
-
-
-
-    public Dictionary<string, ArrayList> CARS = new Dictionary<string, ArrayList>();
-    
-    public Dictionary<int, Car> lot = new Dictionary<int, Car>();
-    System.Random rnd = new System.Random();
-    public Scene(GameObject v, GameObject t, GameObject m, GameObject c, GameObject s){ 
-        Debug.Log("Creating new scene");
-        CARS["VAN"] = new ArrayList(){"Green", "Van", v};
-        CARS["TRUCK"] = new ArrayList(){"Yellow", "Pick-up Truck", t};
-        CARS["MUSTANG"] = new ArrayList(){"Blue", "Sports Car", m};
-        CARS["CHEVY"] = new ArrayList(){"Brown", "Sedan", c};
-        CARS["SPORTS"] = new ArrayList(){"Purple", "Sports Car", s};
-        
-        ArrayList sample_pool = new ArrayList(CARS.Keys);
-        shuffle(sample_pool);
-
-        for(int k = 0; k < LOTSIZE; k++){
-            if(rnd.NextDouble() < SPAWN_RATE){
-                if(sample_pool.Count > 0){
-                    ArrayList car_info = CARS[(String) sample_pool[0]];
-                    sample_pool.RemoveAt(0);
-                    lot[k] = new Car((string) car_info[0], (string) car_info[1], (GameObject) car_info[2]);
-                }
-            }
-            if(!lot.ContainsKey(k)){
-                lot[k] = null;
-            }
-        }
-    }
-
-    private void shuffle(ArrayList texts)
-    {
-        for (int t = 0; t < texts.Count; t++ ){
-            object tmp = texts[t];
-            int r = UnityEngine.Random.Range(t, texts.Count);
-            texts[t] = texts[r];
-            texts[r] = tmp;
-        }
-    }
-}
-
-public class Car{
-    public string color;
-    private string type;
-    private string plate;
-
-    public GameObject car;
-
-    public Car(string car_color, string car_type, GameObject car_item){
-        color = car_color;
-        type = car_type;
-        plate = generate_plate();
-        car = car_item;
-    }
-
-    private string generate_plate(){
-        return "";
-        string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        string numbers = "0123456789";
-        //return "".join(random.sample(alpha, 3)) + "-" + "".join(random.sample(numbers, 4))
-    }
-}
