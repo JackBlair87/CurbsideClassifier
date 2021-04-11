@@ -26,8 +26,8 @@ LOT_SIZE = 8
 
 
 def main():
-    directory_path = './raw_training_data/'
-    json_full_filename = './raw_training_data/image_dictionary.json'
+    directory_path = './3DEnviornment/HackTJ8.0/Assets/TrainingImages'
+    json_full_filename = './3DEnviornment/HackTJ8.0/Assets/TrainingImages/image_dictionary.json'
     with open(json_full_filename) as f:
         # dictionary where the key is a string with the filename and the value is a tuple of length 8 that shows the cars in that space. If there's no car in that space, the tuple should contain None
         json_object = json.load(f)
@@ -64,6 +64,7 @@ def main():
             os.makedirs(directory)
         for index, image in enumerate(save_image_list):
             filename = os.path.join(directory, 'image_' + str(index)+'.jpg')
+            image = image.convert('RGB')
             image.save(filename, 'JPEG')
     print('Done saving images')
 
