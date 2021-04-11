@@ -30,11 +30,12 @@ def main():
     json_full_filename = './raw_training_data/image_dictionary.json'
     with open(json_full_filename) as f:
         # dictionary where the key is a string with the filename and the value is a tuple of length 8 that shows the cars in that space. If there's no car in that space, the tuple should contain None
-        json_object = json.load(f) # TODO read from json
+        json_object = json.load(f)
         all_car_models, image_filename_labels = json_object['all_car_models'], json_object['image_filename_labels']
         image_filename_labels = {key : tuple([value_dictionary[str(index)] for index in range(LOT_SIZE)]) for key, value_dictionary in image_filename_labels.items()}
     
     image_output_dictionary = {elem : list() for elem in all_car_models}
+    # image_output_dictionary['Empty'] = []
 
     print('Separating raw input into spaces...')
     # split up the lot into spaces and use the labels to add them to the dictonary above
@@ -46,6 +47,10 @@ def main():
             image = spaces[index]
             if car_model is not None and car_model != 'null': # TODO change 'null' to None immediately after json read
                 image_output_dictionary[car_model].append(image)
+            else:
+                image_output_dictionary['Empty'].append(image)
+            # else:
+
     print('Done separating images')
     
     print('Saving processed images...')
