@@ -16,6 +16,7 @@ data_dir = pathlib.Path('/Users/akashpamal/Documents/TJHSST/Grade11/HackTJ8.0/fl
 
 SAMPLESIZE = 15
 WHITE = (0, 0, 0)
+LOT_SIZE = 8
 # roses = list(data_dir.glob('roses/*'))
 # type(data_dir.glob('roses/*'))
 # roses
@@ -31,6 +32,7 @@ def main():
         # dictionary where the key is a string with the filename and the value is a tuple of length 8 that shows the cars in that space. If there's no car in that space, the tuple should contain None
         json_object = json.load(f) # TODO read from json
         all_car_models, image_filename_labels = json_object['all_car_models'], json_object['image_filename_labels']
+        image_filename_labels = {key : tuple([value_dictionary[str(index)] for index in range(LOT_SIZE)]) for key, value_dictionary in image_filename_labels.items()}
     
     image_output_dictionary = {elem : list() for elem in all_car_models}
 
@@ -42,7 +44,7 @@ def main():
         spaces = slice_lot(lot_image)
         for index, car_model in enumerate(lot_keys):
             image = spaces[index]
-            if car_model is not None:
+            if car_model is not None and car_model != 'null': # TODO change 'null' to None immediately after json read
                 image_output_dictionary[car_model].append(image)
     print('Done separating images')
     
@@ -57,7 +59,6 @@ def main():
             os.makedirs(directory)
         for index, image in enumerate(save_image_list):
             filename = os.path.join(directory, 'image_' + str(index)+'.png')
-            image.show()
             image.save(filename, 'PNG')
     print('Done saving images')
 
@@ -97,7 +98,7 @@ def slice_lot(lot_image):
         cropped_images.append(im1)
     for left_edge, right_edge in start_edges:
         im2 = lot_image.crop((left_edge, bottom_row_top_edge, right_edge, bottom_row_bottom_edge))
-        im2 = im1.resize((54, 98))
+        im2 = im2.resize((54, 98))
         cropped_images.append(im2)
 
     return cropped_images
