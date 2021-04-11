@@ -51,18 +51,16 @@
         for(int x = 0; x < NUM_SAMPLES; x++){
             scenes.Add(new Scene(van, truck, mustdang, chevy, sports));
         }
-
+        save(path);
      }
 
      private void LateUpdate()
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            print("Worked");
             incrament();  
         }
     }
- 
  
      // Update is called once per frame
      void incrament () {
@@ -113,7 +111,36 @@
         }
         ArrayList currObjects = new ArrayList();
      }
- }
+
+     public void save(string filename){
+        //lot
+        string massive_string = "";
+        for(int x = 0; x < NUM_SAMPLES; x++){
+            Scene s = (Scene) scenes[x];
+            Dictionary<int, string> cars = new Dictionary<int, string>();
+            string big_string = "";
+            for(int y = 0; y < 8; y++){
+                if(s.lot[y] == null){
+                    cars[y] = "null";
+                }
+                else{ 
+                    cars[y] = s.lot[y].color;
+                }
+                string final = "\"" + y + "\":\"" + cars[y] + "\"";
+                if(y != 7){
+                    final += ",\n";
+                }
+                big_string += final;
+            }
+            massive_string += "\"" + x + ".png" + "\":{" + big_string + "}";
+            if(x != NUM_SAMPLES-1){
+                    massive_string += ",\n";
+                }
+                
+            File.WriteAllText (filename, massive_string);
+        }
+    }
+ } 
  
  
 
@@ -177,10 +204,12 @@ public class Scene{
             texts[r] = tmp;
         }
     }
+
+
 }
 
 public class Car{
-    private string color;
+    public string color;
     private string type;
     private string plate;
 
@@ -195,8 +224,8 @@ public class Car{
 
     private string generate_plate(){
         return "";
-        // alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        // numbers = "0123456789"
-        // return "".join(random.sample(alpha, 3)) + "-" + "".join(random.sample(numbers, 4))
+        string alpha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        string numbers = "0123456789";
+        //return "".join(random.sample(alpha, 3)) + "-" + "".join(random.sample(numbers, 4))
     }
 }
